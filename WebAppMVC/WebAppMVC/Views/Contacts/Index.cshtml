@@ -1,7 +1,30 @@
-﻿@model WebAppMVC.Controllers.Contacts
+﻿@model Contact
 
 @{
     ViewData["Title"] = "Contacts";
 }
 
 <h1>Обратная свзязь</h1>
+<form method="post" asp-controller="Contacts" asp-action="Check">
+    <label asp-for="Name"></label>
+    <input asp-for="Name"/>
+    <span asp-validation-for="Name"></span>
+    
+    <label asp-for="Surname"></label>
+    <input asp-for="Surname"/>
+    <span asp-validation-for="Surname"></span>
+    
+    <label asp-for="Age"></label>
+    <input asp-for="Age"/>
+    <span asp-validation-for="Age"></span>
+    
+    <label asp-for="Email"></label>
+    <input asp-for="Email"/>
+    <span asp-validation-for="Email"></span>
+    <label asp-for="message"></label>
+    <input asp-for="message"/>
+    <span asp-validation-for="message"></span>
+    
+    <input type="submit" value="Отправить"/>
+    
+</form>
