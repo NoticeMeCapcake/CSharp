@@ -14,6 +14,8 @@ public partial class Employee
     public int Age { get; set; }
 
     public byte[]? Photo { get; set; }
+    
+    public string DateOfJoining { get; set; } 
 
     public virtual Department? Department { get; set; }
 }
