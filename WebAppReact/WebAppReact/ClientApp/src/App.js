@@ -6,6 +6,7 @@ import {variables} from "./Variables";
 import './custom.css';
 import {Department} from "./components/Department";
 import {Employee} from "./components/Employee";
+import {Home} from "./components/Home";
 
 export default class App extends Component {
   static displayName = App.name;
@@ -25,7 +26,7 @@ export default class App extends Component {
                 </nav>
 
                 <Routes>
-                    <Route path="/" element={<Department />} />
+                    <Route path="/home" element={<Home />} />
                     <Route path="/department" element={<Department />} />
                     <Route path="/employee" element={<Employee />} />
                 </Routes>

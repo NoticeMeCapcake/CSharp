@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import {tsConstructorType} from "@babel/types";
 import {variables} from "../Variables";
 import "bootstrap/js/src/modal"
 
@@ -116,7 +115,7 @@ export class Department extends Component {
                                     {department.DepartmentName}
                                 </td>
                                 <td>
-                                    <button type="button" className="btn btn-light mr-1 float-end"
+                                    <button type="button" className="btn btn-light mx-1 float-end"
                                             data-bs-toggle="modal"
                                             data-bs-target="#DepartmentModal"
                                             onClick={()=> this.editClick(department)}>
@@ -128,7 +127,7 @@ export class Department extends Component {
                                                   d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
                                         </svg>
                                     </button>
-                                    <button type="button" className="btn btn-light mr-1 float-end"
+                                    <button type="button" className="btn btn-light mx-1 float-end"
                                             onClick={()=> this.deleteClick(department.DepartmentId)}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                              fill="currentColor" className="bi bi-trash3" viewBox="0 0 16 16">

@@ -17,8 +17,9 @@ public class EmployeeController : ControllerBase {
 
     [HttpGet]
     public JsonResult Get() {
-        var query = @"SELECT Employee.EmployeeId, Employee.EmployeeName, Employee.Age, Department.DepartmentName, Employee.DateOfJoining, Employee.Photo
-                       FROM Employee left join Department on Employee.DepartmentId = Department.DepartmentId";
+        var query = @"SELECT Employee.EmployeeId, Employee.EmployeeName, Employee.Age, Department.DepartmentName, 
+                        Employee.DateOfJoining, Employee.Photo, Department.DepartmentId
+                        FROM Employee left join Department on Employee.DepartmentId = Department.DepartmentId";
         using var sqlDataTable = new DataTable();
         using (var conn = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"))) {
             conn.Open();
@@ -35,6 +36,7 @@ public class EmployeeController : ControllerBase {
     } 
     [HttpPost]
     public JsonResult Post(Employee emp) {
+        Console.WriteLine("ask;fsak");
         var query = @"INSERT INTO Employee (EmployeeName, DepartmentId, Age, DateOfJoining, Photo) 
             VALUES (@EmployeeName, @DepartmentId, @Age, @DateOfJoining, @Photo)";
 
@@ -61,18 +63,6 @@ public class EmployeeController : ControllerBase {
 
                 conn.Close();
                 
-                // cmd.Parameters.AddWithValue("@EmployeeName", emp.EmployeeName);
-                // cmd.Parameters.AddWithValue("@DepartmentId", emp.DepartmentId == null ? DBNull.Value : (Object)emp.DepartmentId);
-                // cmd.Parameters.AddWithValue("@Photo", emp.Photo);
-                // cmd.Parameters.AddWithValue("@Age", (Object) emp.Age);
-                // cmd.Parameters.AddWithValue("@DateOfJoining", emp.DateOfJoining);
-                // Console.WriteLine(emp.DateOfJoining);
-                // Console.WriteLine("sakhbas");
-                // cmd.Prepare();
-                // var reader = cmd.ExecuteReader();
-                // sqlDataTable.Load(reader);
-                // reader.Close();
-                // conn.Close();
             }
         }
         return new JsonResult("Insertion success");
