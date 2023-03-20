@@ -39,7 +39,12 @@ export class Employee extends Component {
         this.setState({
             modalTitle: "Add Employee",
             DepartmentName: "",
-            DepartmentId: 0,
+            DepartmentId: 1,
+            EmployeeId: 0,
+            EmployeeName: "",
+            DateOfJoining: "",
+            Photo: null,
+            Age: 0
         });
     }
 
@@ -226,8 +231,6 @@ export class Employee extends Component {
                                             <select className="form-select" id="depSelect"
                                                     onChange={(e) => {
                                                         this.setState({DepartmentId: e.target.value});
-                                                        // console.log(e.target.selectedOptions.item(0).text + "::" + e.target.value);
-                                                        // console.log(DepartmentId);
                                                     }}
                                             >
                                                 {departments.map((dep) => {

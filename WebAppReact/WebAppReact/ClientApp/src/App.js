@@ -14,7 +14,7 @@ export default class App extends Component {
     return (
         <BrowserRouter>
             <div className="container-fluid">
-                <h3 className="App display3">Home Page</h3>
+                <h3 className="App display3">MyDepartmentApp</h3>
                 <nav className="navbar navbar-expand-sm bg-light navbar-dark">
                     <ul className="navbar-nav">
                         <li className="nav-item- m-1">
