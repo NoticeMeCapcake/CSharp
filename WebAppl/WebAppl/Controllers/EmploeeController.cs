@@ -18,7 +18,7 @@ public class EmployeeController : ControllerBase {
     [HttpGet]
     public JsonResult Get() {
         var query = @"SELECT Employee.EmployeeId, Employee.EmployeeName, Employee.Age, Department.DepartmentName, Employee.DateOfJoining, Employee.Photo
-                       FROM Employee, Department WHERE Employee.DepartmentId = Department.DepartmentId";
+                       FROM Employee left join Department on Employee.DepartmentId = Department.DepartmentId";
         using var sqlDataTable = new DataTable();
         using (var conn = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"))) {
             conn.Open();
