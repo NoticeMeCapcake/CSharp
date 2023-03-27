@@ -18,6 +18,12 @@ export class Employee extends Component {
             DateOfJoining: "",
             Photo: null,
             Age: 0,
+
+
+            EmployeesWithoutFilter: [],
+            EmployeeIdFilter: "",
+            EmployeeNameFilter: "",
+            DepartmentNameFilter: "",
         }
     }
 
@@ -28,7 +34,10 @@ export class Employee extends Component {
             .then(data => this.setState({ departments: data }));
         fetch(variables.API_URL + '/employee')
             .then(response => response.json())
-            .then(data => this.setState({ employees: data }));
+            .then(data => {
+                this.setState({EmployeesWithoutFilter: data});
+                this.filterEmployees();
+            });
     }
 
     componentDidMount() {
@@ -50,7 +59,8 @@ export class Employee extends Component {
 
     editClick = (emp) => {
         this.setState({
-            modalTitle: "Edit Department",
+            modalTitle: "Edit Employee",
+            EmployeeId: emp.EmployeeId,
             DepartmentId: emp.DepartmentId,
             EmployeeName: emp.EmployeeName,
             DateOfJoining: emp.DateOfJoining,
@@ -61,6 +71,7 @@ export class Employee extends Component {
 
     sendMessage = (method, id="") => {
         console.log(JSON.stringify({
+            EmployeeId: this.state.EmployeeId,
             EmployeeName: this.state.EmployeeName,
             Age: this.state.Age,
             DepartmentId: this.state.DepartmentId,
@@ -74,6 +85,7 @@ export class Employee extends Component {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                EmployeeId: this.state.EmployeeId,
                 EmployeeName: this.state.EmployeeName,
                 DepartmentId: this.state.DepartmentId,
                 Age: this.state.Age,
@@ -83,7 +95,6 @@ export class Employee extends Component {
         })
             .then(response => response.json())
             .then(data => {
-                this.refresh();
                 this.setState({
                     modalTitle: "",
                     DepartmentName: "",
@@ -93,7 +104,9 @@ export class Employee extends Component {
                     DateOfJoining: "",
                     Photo: null,
                     Age: 0,
-                })
+                });
+                this.refresh();
+                this.filterEmployees();
             }, (error) => {
                 alert("Failed:" + error);
             });
@@ -115,7 +128,6 @@ export class Employee extends Component {
     }
     
     imgUpload = (e) => {
-        console.log("imgUploasd")
         let reader = new FileReader();
         let file = e.target.files[0];
         // createObjectURL;
@@ -126,10 +138,57 @@ export class Employee extends Component {
             console.log(JSON.stringify({Photo: reader.result.slice(reader.result.indexOf(',')+1)}));
             console.log(JSON.stringify({Photo: reader.result}));
         }
-        // reader.readAsDataURL(file);
         reader.readAsDataURL(file);
     }
+    
+    renderSortingBtn (prop, asc) {
+        return (
+            <button type="button" className="btn btn-light m-1"
+                    onClick={() => this.sortTable(prop, asc)}>
+                {asc ?
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     className="bi bi-arrow-down-square" viewBox="0 0 16 16">
+                    <path fillRule="evenodd"
+                          d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.5 2.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"/>
+                </svg> :
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         className="bi bi-arrow-up-square" viewBox="0 0 16 16">
+                    <path fillRule="evenodd"
+                          d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.5 9.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
+                </svg>
+                }
+                    
+            </button>
+        )
+        
+    }
 
+    sortTable(prop, asc) {
+        let sortedData = this.state.employees.sort((a, b) => {
+            if (asc) {
+                return a[prop] > b[prop] ? 1 : a[prop] < b[prop] ? -1 : 0;
+            } else {
+                return b[prop] > a[prop] ? 1 : b[prop] < a[prop] ? -1 : 0;
+            }
+        })
+        this.setState({ employees: sortedData });
+
+    }
+
+    filterEmployees() {
+        let Employees = this.state.EmployeesWithoutFilter;
+        if (this.state.EmployeeIdFilter !== "") {
+            Employees = Employees.filter(Employee => Employee.EmployeeId.toString() === this.state.EmployeeIdFilter);
+        }
+        if (this.state.EmployeeNameFilter !== "") {
+            Employees = Employees.filter(Employee => Employee.EmployeeName.toLowerCase().includes(this.state.EmployeeNameFilter.toLowerCase()));
+        }
+        if (this.state.DepartmentNameFilter !== "") {
+            Employees = Employees.filter(Employee => Employee.DepartmentName.toLowerCase().includes(this.state.DepartmentNameFilter.toLowerCase()));
+        }
+        this.setState({ employees: Employees });
+    }
+    
     render() {
         const { departments,
             employees, modalTitle, DepartmentName, DepartmentId,
@@ -146,12 +205,36 @@ export class Employee extends Component {
                     <thead>
                     <tr>
                         <th>
+                            <div className="d-flex flex-row">
+                                <input className="form-control my-2 me-2"
+                                       onChange={(e) => {this.state.EmployeeIdFilter = e.target.value;
+                                           this.filterEmployees();}}
+                                       placeholder="Filter"/>
+                                {this.renderSortingBtn("EmployeeId", true)}
+                                {this.renderSortingBtn("EmployeeId", false)}
+                            </div>
                             Id
                         </th>
                         <th>
+                            <div className="d-flex flex-row">
+                                <input className="form-control my-2 me-2"
+                                       onChange={(e) => {this.state.EmployeeNameFilter = e.target.value;
+                                           this.filterEmployees();}}
+                                       placeholder="Filter"/>
+                                {this.renderSortingBtn("EmployeeName", true)}
+                                {this.renderSortingBtn("EmployeeName", false)}
+                            </div>
                             Name
                         </th>
                         <th>
+                            <div className="d-flex flex-row">
+                                <input className="form-control my-2 me-2"
+                                       onChange={(e) => {this.state.DepartmentNameFilter = e.target.value;
+                                           this.filterEmployees();}}
+                                       placeholder="Filter"/>
+                                {this.renderSortingBtn("EmployeeName", true)}
+                                {this.renderSortingBtn("EmployeeName", false)}
+                            </div>
                             Department
                         </th>
                         <th>
@@ -160,7 +243,7 @@ export class Employee extends Component {
                         <th>
                             Age
                         </th>
-                        <th className="float-end">
+                        <th className="text-end">
                             Options
                         </th>
                     </tr>
@@ -244,7 +327,7 @@ export class Employee extends Component {
                                         </div>
                                         <div className="input-group mb-3">
                                             <span className="input-group-text"> DOJ</span>
-                                            <input type="date" className="form-control" value={DateOfJoining} onChange={(e) => this.setState({ DateOfJoining: e.target.value })} />
+                                            <input type="date" className="form-control" value={DateOfJoining.slice(0, 10)} onChange={(e) => this.setState({ DateOfJoining: e.target.value })} />
                                         </div>
                                         <div className="input-group mb-3">
                                             <span className="input-group-text"> Age</span>
@@ -256,11 +339,11 @@ export class Employee extends Component {
                                         <input className="m-2" type="file" onChange={this.imgUpload}/>
                                     </div>
                                 </div>
-                                {EmployeeId == 0?
+                                {EmployeeId === 0?
                                     <button type="button" className="btn btn-primary float-start" data-bs-dismiss="modal"
                                             onClick={() => this.createClick()} >Create</button>
                                     :null}
-                                {EmployeeId != 0?
+                                {EmployeeId !== 0?
                                     <button type="button" className="btn btn-primary float-start" data-bs-dismiss="modal"
                                             onClick={() => this.updateClick()} >Update</button>
                                     :null}

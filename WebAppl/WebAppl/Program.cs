@@ -1,7 +1,3 @@
-// using Microsoft.EntityFrameworkCore;
-
-// using Microsoft.EntityFrameworkCore;
-
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Serialization;
 using Pomelo.EntityFrameworkCore.MySql;
@@ -9,14 +5,6 @@ using WebAppl.DbRepo;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// builder.Services.AddDbContext<WebApiDbContext>(dbContextOptions => dbContextOptions
-//     .UseMySql("server=localhost;user=root;password=1234;database=ef", new Version(8, 0, 31))
-//     // The following three options help with debugging, but should
-//     // be changed or removed for production.
-//     .LogTo(Console.WriteLine, LogLevel.Information)
-//     .EnableSensitiveDataLogging()
-//     .EnableDetailedErrors());
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<WebApiContext>(_ => 
     _.UseMySql(connectionString, 

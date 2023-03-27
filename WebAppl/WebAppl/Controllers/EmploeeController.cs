@@ -69,7 +69,7 @@ public class EmployeeController : ControllerBase {
     }
     [HttpPut]
     public JsonResult Put(Employee emp) {
-        string query = @"UPDATE Employee SET EmployeeName = @DepartmentName, DepartmentId = @DepartmentId, Age = @Age, Photo = @Photo 
+        var query = @"UPDATE Employee SET EmployeeName = @EmployeeName, DepartmentId = @DepartmentId, DateOfJoining = @DateOfJoining, Age = @Age, Photo = @Photo
                 WHERE EmployeeId = @EmployeeId";
         using DataTable sqlDataTable = new DataTable();
         using (MySqlConnection conn = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"))) {
@@ -77,6 +77,7 @@ public class EmployeeController : ControllerBase {
             using (MySqlCommand cmd = new MySqlCommand(query, conn)) {
                 cmd.Parameters.AddWithValue("@EmployeeName", emp.EmployeeName);
                 cmd.Parameters.AddWithValue("@EmployeeId", (Object)emp.EmployeeId);
+                cmd.Parameters.AddWithValue("@DateOfJoining", emp.DateOfJoining);
                 cmd.Parameters.AddWithValue("@DepartmentId", (Object)emp.DepartmentId);
                 cmd.Parameters.AddWithValue("@Age", (Object)emp.Age);
                 cmd.Parameters.AddWithValue("@Photo", emp.Photo);

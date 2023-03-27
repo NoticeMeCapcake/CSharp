@@ -20,7 +20,9 @@ export class Home extends Component {
                  </h2>
              </div>
          </div>
+           
        </div>
+        
     );
   }
 }

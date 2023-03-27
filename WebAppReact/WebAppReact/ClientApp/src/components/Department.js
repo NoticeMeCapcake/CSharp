@@ -12,14 +12,31 @@ export class Department extends Component {
             modalTitle: "",
             DepartmentName: "",
             DepartmentId: 0,
+            
+            DepartmentIdFilter: "",
+            DepartmentNameFilter: "",
+            DepartmentsWithoutFilter: [],
         }
+    }
+    
+    filterDepartments() {
+        let departments = this.state.DepartmentsWithoutFilter;
+        if (this.state.DepartmentIdFilter !== "") {
+            departments = departments.filter(department => department.DepartmentId.toString() === this.state.DepartmentIdFilter);
+        }
+        if (this.state.DepartmentNameFilter !== "") {
+            departments = departments.filter(department => department.DepartmentName.toLowerCase().includes(this.state.DepartmentNameFilter.toLowerCase()));
+        }
+        this.setState({ departments: departments });
     }
     
     refreshDepartments() {
         console.log("GET")
         fetch(variables.API_URL + '/department')
             .then(response => response.json())
-            .then(data => this.setState({ departments: data }));
+            .then(data => {this.setState({ DepartmentsWithoutFilter: data });
+                    this.filterDepartments();});
+        
     }
     
     componentDidMount() {
@@ -56,12 +73,13 @@ export class Department extends Component {
         })
             .then(response => response.json())
             .then(data => {
-                this.refreshDepartments();
                 this.setState({
                     modalTitle: "",
                     DepartmentName: "",
                     DepartmentId: 0,
-                })
+                });
+                this.refreshDepartments();
+                this.filterDepartments();
             }, (error) => {
                 alert("Failed:" + error);
             });
@@ -82,6 +100,28 @@ export class Department extends Component {
             this.sendMessage("DELETE", id.toString());
         }
     }
+
+    renderSortingBtn (prop, asc) {
+        return (
+            <button type="button" className="btn btn-light m-1"
+                    onClick={() => this.sortTable(prop, asc)}>
+                {asc ?
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         className="bi bi-arrow-down-square" viewBox="0 0 16 16">
+                        <path fillRule="evenodd"
+                              d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.5 2.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"/>
+                    </svg> :
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         className="bi bi-arrow-up-square" viewBox="0 0 16 16">
+                        <path fillRule="evenodd"
+                              d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.5 9.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
+                    </svg>
+                }
+
+            </button>
+        )
+
+    }
     
     render() {
         const { departments, modalTitle, DepartmentName, DepartmentId } = this.state;
@@ -97,10 +137,30 @@ export class Department extends Component {
                    <thead>
                    <tr>
                        <th>
-                           DepartmentId
+                           <div className="d-flex flex-row">
+                               <input className="form-control my-2 me-2"
+                               onChange={(e) => {this.state.DepartmentIdFilter = e.target.value;
+                               this.filterDepartments();}}
+                               placeholder="Filter"/>
+                               {this.renderSortingBtn("DepartmentId", true)}
+                               {this.renderSortingBtn("DepartmentId", false)}
+                           </div>
+                               
+                           Id
                        </th>
                        <th>
+                           <div className="d-flex flex-row">
+                               <input className="form-control my-2 me-2"
+                                      onChange={(e) => {this.state.DepartmentNameFilter = e.target.value;
+                                          this.filterDepartments();}}
+                                      placeholder="Filter"/>
+                               {this.renderSortingBtn("DepartmentName", true)}
+                               {this.renderSortingBtn("DepartmentName", false)}
+                           </div>
                            DepartmentName
+                       </th>
+                       <th className="text-end">
+                           Options
                        </th>
                    </tr>
                    </thead>
@@ -153,11 +213,11 @@ export class Department extends Component {
                                     <span className="input-group-text"> DepartmentName</span>
                                     <input type="text" className="form-control" value={DepartmentName} onChange={(e) => this.setState({ DepartmentName: e.target.value })} />
                                 </div>
-                                {DepartmentId == 0?
+                                {DepartmentId === 0?
                                     <button type="button" className="btn btn-primary float-start" data-bs-dismiss="modal" 
                                         onClick={() => this.createClick()} >Create</button>
                                     :null}
-                                {DepartmentId != 0?
+                                {DepartmentId !== 0?
                                     <button type="button" className="btn btn-primary float-start" data-bs-dismiss="modal"
                                             onClick={() => this.updateClick()} >Update</button>
                                     :null}
@@ -168,5 +228,17 @@ export class Department extends Component {
                 
             </div>
         );
+    }
+
+    sortTable(prop, asc) {
+        let sortedData = this.state.departments.sort((a, b) => {
+            if (asc) {
+                return a[prop] > b[prop] ? 1 : a[prop] < b[prop] ? -1 : 0;
+            } else {
+                return b[prop] > a[prop] ? 1 : b[prop] < a[prop] ? -1 : 0;
+            }
+        })
+        this.setState({ departments: sortedData });
+        
     }
 }
