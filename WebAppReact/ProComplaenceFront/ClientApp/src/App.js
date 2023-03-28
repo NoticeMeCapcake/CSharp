@@ -18,7 +18,6 @@ export default class App extends Component {
             const { element, ...rest } = route;
             return <Route key={index} {...rest} element={element} />;
           })}
-            {/*<Route path="/overseer/:id"  element={<Overseer />} />*/}
             <Route path="*" element={<h1>Not Found</h1>} />
         </Routes>
       </Layout>

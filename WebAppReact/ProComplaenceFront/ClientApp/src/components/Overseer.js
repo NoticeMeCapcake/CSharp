@@ -28,22 +28,17 @@ export class Overseer extends Component {
     componentDidMount() {
         let id  = window.location.href.split('/')[4];
         this.fetchData(id);
-        // this.filterFiles();
     }
     
     fetchData(id) {
         fetch(variables.API_URL + '/api/fileread/' + id)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 this.setState({
                     Headers: data["ExactFile"]["Headers"],
-                    // UnfilteredData: data["ExactFile"]["Data"],
                 });
                 this.state.UnfilteredData = data["ExactFile"]["Data"];
                 this.filterFiles();
-                // console.log(this.state.Headers);
-                // console.log(this.state.Data);
             });
     }
 
@@ -98,31 +93,11 @@ export class Overseer extends Component {
                 return true;
             });
         });
-        // console.log(data_list);
-        // let data_list1 = this.state.DataRows;
-        // for (const [index1, row] of this.state.UnfilteredData.entries()) {
-        //     console.log("Filter1: " + index1)
-        //     console.log(row);
-        //     for (const [index, cell] of row.entries()) {
-        //         let filterValue = this.state.DataFilter[index];
-        //         console.log("Filter: " + filterValue)
-        //         if (filterValue !== "" && filterValue !== undefined && filterValue !== null) {
-        //            
-        //             if (!cell.toLowerCase().includes(filterValue.toLowerCase())) {
-        //                 data_list.splice(index1, 1);
-        //                 break;
-        //             }
-        //         }
-        //     }
-        // }
-        // this.state.FilesList = file_list;
         this.setState({ DataRows: data_list });
     }
 
     render() {
         const {Headers, DataRows} = this.state;
-        console.log(Headers);
-        console.log( window.location.href.split('/')[4]);
         return (
           <div>
               <h1>
@@ -136,9 +111,7 @@ export class Overseer extends Component {
                                   <div className="d-flex flex-row">
                                       <input className="form-control my-2 me-1 p-0" style={{minWidth: "50px"}}
                                              onChange={(e) => {
-                                                 console.log(index + " : " + e.target.value);
                                                  this.state.DataFilter[index] = e.target.value;
-                                                 console.log(index + " : " + this.state.DataFilter[index]);
                                                  this.filterFiles();
                                              }}
                                              placeholder="Filter"/>

@@ -24,7 +24,8 @@ namespace WebApp.Controllers {
             filename as {nameof(FileTb.Filename)},
             filepath as {nameof(FileTb.Filepath)},
             lastdate as {nameof(FileTb.LastDate)}
-            from filetb;";
+            from filetb
+            where userid = @userid;";
 
         public FileUploadController(IHostEnvironment hosingEnvironment, IConfiguration configuration) {
             _configuration = configuration;
@@ -32,33 +33,38 @@ namespace WebApp.Controllers {
             _dbConnection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
         }
 
-        [HttpPost]
-        public IActionResult Post() {
+        [HttpPost("{id}")]
+        public IActionResult Post(int id) {
             
             foreach (var file in Request.Form.Files)
             {
                 // получаем имя файла
                     var fileName = System.IO.Path.GetFileName(file.FileName);
                     // сохраняем файл в папку Files в проекте
-                    var filePath =
-                            "./userFiles/" + fileName;
+                    var filePath = "./userFiles/" + id;
+                    if (!Directory.Exists(filePath)) {
+                        Directory.CreateDirectory(filePath);
+                    }
+                     filePath += "/" + fileName;
                     using (Stream fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write)) {
                         file.CopyTo(fileStream);
                     }
-                    var query = @"INSERT INTO filetb (Filename, Filepath, lastdate) VALUES (@Filename, @Filepath, curdate())";
+                    var query = @"INSERT INTO filetb (Filename, Filepath, lastdate, userid) VALUES (@Filename, @Filepath, curdate(), @userid)";
                     _dbConnection.Open();
                     using (var command = new MySqlCommand(query, _dbConnection)) {
                         command.Parameters.AddWithValue("@Filename", fileName);
                         command.Parameters.AddWithValue("@Filepath", filePath);
+                        command.Parameters.AddWithValue("@userid", (Object) id);
                         try {
                             command.Prepare();
                             command.ExecuteNonQuery();
                         }
                         catch (MySqlException e) {
                             if (e.Message.Contains("Duplicate")) {
-                                query = @"UPDATE filetb SET lastdate = curdate() WHERE filename = @Filename";
+                                query = @"UPDATE filetb SET lastdate = curdate() WHERE filename = @Filename and userid = @userid";
                                 using (var UPDcommand = new MySqlCommand(query, _dbConnection)) {
                                     UPDcommand.Parameters.AddWithValue("@Filename", fileName);
+                                    UPDcommand.Parameters.AddWithValue("@userid", (Object) id);
                                     try {
                                         UPDcommand.Prepare();
                                         UPDcommand.ExecuteNonQuery();
@@ -89,13 +95,14 @@ namespace WebApp.Controllers {
 
         }
 
-        [HttpGet]
-        public JsonResult Get() {
+        [HttpGet("{id}")]
+        public JsonResult Get(int id) {
             var query = _selectQuery;
             var result = new List<FileTb>();
             // using (var connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"))) {
                 _dbConnection.Open();
                 using (var command = new MySqlCommand(query, _dbConnection)) {
+                    command.Parameters.AddWithValue("@userid", (Object) id);
                     using (var reader = command.ExecuteReader()) {
                         while (reader.Read()) {
                             result.Add(new FileTb {
