@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -28,7 +29,6 @@ namespace WebApp.Controllers {
         public FileUploadController(IHostEnvironment hosingEnvironment, IConfiguration configuration) {
             _configuration = configuration;
             _hostingEnvironment = hosingEnvironment;
-            // _dbConnection = 
             _dbConnection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
         }
 
@@ -37,7 +37,6 @@ namespace WebApp.Controllers {
             
             foreach (var file in Request.Form.Files)
             {
-                // var upload = file;
                 // получаем имя файла
                     var fileName = System.IO.Path.GetFileName(file.FileName);
                     // сохраняем файл в папку Files в проекте
@@ -114,6 +113,62 @@ namespace WebApp.Controllers {
 
             return new JsonResult(result);
 
+        }
+        
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id) {
+            var getQuery = @"select filepath from filetb where id = @id";
+            String filePath = "";
+            _dbConnection.Open();
+            using (var getCommand = new MySqlCommand(getQuery, _dbConnection)) {
+                getCommand.Parameters.AddWithValue("@id", (Object) id);
+                try {
+                    getCommand.Prepare();
+                    var result = getCommand.ExecuteScalar();
+                    filePath = result.ToString();
+                    Console.WriteLine(filePath);
+
+                }
+                catch (MySqlException e) {
+                    _dbConnection.Close();
+                    return BadRequest(new {
+                        Status = "Failed",
+                        Message = "Ошибка, нет такого файла"
+                    });
+                }
+            }
+            _dbConnection.Close();
+            
+            if (filePath == "") {
+                return BadRequest(new {
+                    Status = "Failed",
+                    Message = "Ошибка, нет такого файла"
+                });
+            }
+            
+            //delete file
+            if (System.IO.File.Exists(filePath)) {
+                System.IO.File.Delete(filePath);
+            }
+            
+            var query = @"delete from filetb where id = @id";
+            _dbConnection.Open();
+            using (var command = new MySqlCommand(query, _dbConnection)) {
+                command.Parameters.AddWithValue("@id", (Object) id);
+                try {
+                    command.Prepare();
+                    command.ExecuteNonQuery();
+                }
+                catch (MySqlException e) {
+                    _dbConnection.Close();
+                    return BadRequest(new {
+                        Status = "Failed",
+                        Message = "При удалении файла произошла ошибка"
+                    });
+                }
+            }
+            _dbConnection.Close();
+            return Ok();
         }
     }
 }
