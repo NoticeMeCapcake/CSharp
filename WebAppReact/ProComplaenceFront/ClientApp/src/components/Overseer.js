@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {variables} from "../Variables";
 import "bootstrap/js/src/modal"
 import {useParams, BrowserRouterProps} from "react-router-dom";
-import $ from "jquery";
 
 
 

@@ -40,7 +40,7 @@ namespace WebApp.Controllers {
             {
                 // получаем имя файла
                     var fileName = System.IO.Path.GetFileName(file.FileName);
-                    // сохраняем файл в папку Files в проекте
+                    // сохраняем файл в папку в проекте
                     var filePath = "./userFiles/" + id;
                     if (!Directory.Exists(filePath)) {
                         Directory.CreateDirectory(filePath);
@@ -99,7 +99,6 @@ namespace WebApp.Controllers {
         public JsonResult Get(int id) {
             var query = _selectQuery;
             var result = new List<FileTb>();
-            // using (var connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"))) {
                 _dbConnection.Open();
                 using (var command = new MySqlCommand(query, _dbConnection)) {
                     command.Parameters.AddWithValue("@userid", (Object) id);
@@ -116,7 +115,6 @@ namespace WebApp.Controllers {
                 }
 
                 _dbConnection.Close();
-            // }
 
             return new JsonResult(result);
 
