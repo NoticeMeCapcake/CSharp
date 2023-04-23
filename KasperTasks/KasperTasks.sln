@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KasperTasks", "KasperTasks.csproj", "{020F639A-11EC-44B3-AA5D-53A71491CBEF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{020F639A-11EC-44B3-AA5D-53A71491CBEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{020F639A-11EC-44B3-AA5D-53A71491CBEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{020F639A-11EC-44B3-AA5D-53A71491CBEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{020F639A-11EC-44B3-AA5D-53A71491CBEF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

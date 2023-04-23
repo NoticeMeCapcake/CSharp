@@ -1,0 +1,7 @@
+D:\Danon\Documents\CSharp\KasperTask\bin\Debug\KasperTask.exe
+D:\Danon\Documents\CSharp\KasperTask\bin\Debug\KasperTask.pdb
+D:\Danon\Documents\CSharp\KasperTask\obj\Debug\KasperTask.csproj.AssemblyReference.cache
+D:\Danon\Documents\CSharp\KasperTask\obj\Debug\KasperTask.csproj.SuggestedBindingRedirects.cache
+D:\Danon\Documents\CSharp\KasperTask\obj\Debug\KasperTask.csproj.CoreCompileInputs.cache
+D:\Danon\Documents\CSharp\KasperTask\obj\Debug\KasperTask.exe
+D:\Danon\Documents\CSharp\KasperTask\obj\Debug\KasperTask.pdb

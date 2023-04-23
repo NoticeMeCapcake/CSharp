@@ -1,0 +1,15 @@
+D:\Danon\Documents\CSharp\KasperConsoleLogParser\bin\Debug\net7.0\KasperConsoleLogParser.exe
+D:\Danon\Documents\CSharp\KasperConsoleLogParser\bin\Debug\net7.0\KasperConsoleLogParser.deps.json
+D:\Danon\Documents\CSharp\KasperConsoleLogParser\bin\Debug\net7.0\KasperConsoleLogParser.runtimeconfig.json
+D:\Danon\Documents\CSharp\KasperConsoleLogParser\bin\Debug\net7.0\KasperConsoleLogParser.dll
+D:\Danon\Documents\CSharp\KasperConsoleLogParser\bin\Debug\net7.0\KasperConsoleLogParser.pdb
+D:\Danon\Documents\CSharp\KasperConsoleLogParser\obj\Debug\net7.0\KasperConsoleLogParser.csproj.AssemblyReference.cache
+D:\Danon\Documents\CSharp\KasperConsoleLogParser\obj\Debug\net7.0\KasperConsoleLogParser.GeneratedMSBuildEditorConfig.editorconfig
+D:\Danon\Documents\CSharp\KasperConsoleLogParser\obj\Debug\net7.0\KasperConsoleLogParser.AssemblyInfoInputs.cache
+D:\Danon\Documents\CSharp\KasperConsoleLogParser\obj\Debug\net7.0\KasperConsoleLogParser.AssemblyInfo.cs
+D:\Danon\Documents\CSharp\KasperConsoleLogParser\obj\Debug\net7.0\KasperConsoleLogParser.csproj.CoreCompileInputs.cache
+D:\Danon\Documents\CSharp\KasperConsoleLogParser\obj\Debug\net7.0\KasperConsoleLogParser.dll
+D:\Danon\Documents\CSharp\KasperConsoleLogParser\obj\Debug\net7.0\refint\KasperConsoleLogParser.dll
+D:\Danon\Documents\CSharp\KasperConsoleLogParser\obj\Debug\net7.0\KasperConsoleLogParser.pdb
+D:\Danon\Documents\CSharp\KasperConsoleLogParser\obj\Debug\net7.0\KasperConsoleLogParser.genruntimeconfig.cache
+D:\Danon\Documents\CSharp\KasperConsoleLogParser\obj\Debug\net7.0\ref\KasperConsoleLogParser.dll
